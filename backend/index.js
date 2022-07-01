@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const products = require('./products');
 const registerRouter = require('./routes/register');
 const loginRouter = require('./routes/login');
+const stripeRouter = require('./routes/stripe');
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(cors());
 app.use('/api/register', registerRouter);
 app.use('/api/login', loginRouter);
+app.use('/api/stripe', stripeRouter);
 
 app.get('/', (req, res) => {
     res.send('Welcome to shopping cart!');

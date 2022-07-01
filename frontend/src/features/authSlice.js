@@ -17,12 +17,12 @@ const initialState = {
 
 export const registerUser = createAsyncThunk(
     'auth/registerUser',
-    async (values, {rejectWithValue}) => {
+    async (user, {rejectWithValue}) => {
         try {
             const token = await axios.post(`${url}/register`, {
-                name: values.name,
-                email: values.email,
-                password: values.password
+                name: user.name,
+                email: user.email,
+                password: user.password
             });
             localStorage.setItem("token", token.data);
             return token.data;
@@ -38,10 +38,10 @@ const authSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
-        builder.addCase(registerStatus.pending, (state, action) => {
+        builder.addCase(registerUser.pending, (state, action) => {
             return {...state, registerStatus: "pending"}
         });
-        builder.addCase(registerStatus.fulfilled, (state, action) => {
+        builder.addCase(registerUser.fulfilled, (state, action) => {
             if(action.payload) {
                 const user = jwtDecode(action.payload);
                 return {
@@ -54,7 +54,7 @@ const authSlice = createSlice({
                 }
             } else return state;
         });
-        builder.addCase(registerStatus.reject, (state, action) => {
+        builder.addCase(registerUser.rejected, (state, action) => {
             return {
                 ...state,
                 registerStatus: "rejected",
